@@ -3,12 +3,23 @@ from pydantic import BaseModel
 import os
 import openai
 from dotenv import load_dotenv
+
+from fastapi.middleware.cors import CORSMiddleware
+
 load_dotenv()
 
 # Initialize OpenAI client with the new SDK (>=1.0.0)
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Change to your domain for production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class PromptInput(BaseModel):
     prompt: str
